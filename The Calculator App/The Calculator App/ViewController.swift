@@ -46,6 +46,14 @@ class ViewController: UIViewController {
     
     
     @IBAction func didPressClear(_ sender: Any) {
+        // resests calculator's properties, all to defaults
+        labelString = "0"
+        currentMode = .notSet
+        savedNum = 0
+        lastButtonWasMode = false
+        
+        //reset label text to 0
+        label.text = "0"
         
     }
     
@@ -58,9 +66,10 @@ class ViewController: UIViewController {
             return
         }
         
+        //append and set the labelString
         labelString = labelString.appending(stringValue)
         
-        //handle the possible preceeding 0's issue
+        //handle possible preceeding 0's issue by, to Integer type casting
         updateText()
     }
     
