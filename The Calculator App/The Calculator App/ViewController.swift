@@ -22,16 +22,18 @@ class ViewController: UIViewController {
     var labelString: String = "0"
     var currentMode: modes = .notSet
     var savedNum: Int = 0
-    var lastButtonWasMode: Bool = false
+    var lastButtonWasOperator: Bool = false
     
     
     @IBAction func didPressPlus(_ sender: Any) {
+        changeModes(newMode: .addition)
+        
         
     }
     
     
     @IBAction func didPressMinus(_ sender: Any) {
-        
+        changeModes(newMode: .substraction)
     }
     
     
@@ -50,7 +52,7 @@ class ViewController: UIViewController {
         labelString = "0"
         currentMode = .notSet
         savedNum = 0
-        lastButtonWasMode = false
+        lastButtonWasOperator = false
         
         //reset label text to 0
         label.text = "0"
@@ -66,11 +68,21 @@ class ViewController: UIViewController {
             return
         }
         
+        if (lastButtonWasOperator) {
+            //if true, the last button tapped, is no longer an operator button
+            lastButtonWasOperator = false
+            
+            //reset the label string
+            labelString = "0"
+            
+        }
+        
         //append and set the labelString
         labelString = labelString.appending(stringValue)
         
         //handle possible preceeding 0's issue by, to Integer type casting
         updateText()
+        
     }
     
     
@@ -82,12 +94,28 @@ class ViewController: UIViewController {
             return
         }
         
+        //capturing every numeric input until user presses an operator button
+        if (currentMode == .notSet) {
+            savedNum = labelInt
+        }
+        
         //set the label text
         label.text = "\(labelInt)"
+        
     }
     
+    //changes operator modes upon operator button taps
     func changeModes(newMode: modes){
+        //ignore operator button taps before any number inputs
+        if(savedNum == 0){
+            return
+        }
         
+        //if there is a number input, before an operator button tap
+        currentMode = newMode
+        
+        //update that the last button tapped was an operator button
+        lastButtonWasOperator = true
     }
     
 
