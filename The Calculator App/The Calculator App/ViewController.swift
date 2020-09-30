@@ -16,7 +16,6 @@ enum modes {
 
 class ViewController: UIViewController {
     
-    
     @IBOutlet weak var label: UILabel!
     
     var labelString: String = "0"
@@ -24,11 +23,8 @@ class ViewController: UIViewController {
     var savedNum: Int = 0 // holds first numeric value entered before any operator button tap
     var lastButtonWasOperator: Bool = false
     
-    
     @IBAction func didPressPlus(_ sender: Any) {
         changeModes(newMode: .addition)
-        
-        
     }
     
     
@@ -73,10 +69,7 @@ class ViewController: UIViewController {
         /* since the last button tapped was equals (=) button, which is an operator button */
         lastButtonWasOperator = true
         // make sure user presses numeric buttons next
-        
-        
     }
-    
     
     @IBAction func didPressClear(_ sender: Any) {
         // resests calculator's properties, all to defaults
@@ -87,7 +80,6 @@ class ViewController: UIViewController {
         
         // reset label text to 0
         label.text = "0"
-        
     }
     
     
@@ -105,7 +97,6 @@ class ViewController: UIViewController {
             
             // reset the label string
             labelString = "0"
-            
         }
         
         // append and set the labelString
@@ -113,7 +104,6 @@ class ViewController: UIViewController {
         
         // handle possible preceeding 0's issue by, to Integer type casting
         updateText()
-        
     }
     
     
@@ -130,9 +120,18 @@ class ViewController: UIViewController {
             savedNum = labelInt
         }
         
-        // set the label text
-        label.text = "\(labelInt)"
+        // format numbers with commas
+        // create constant formatter, an object of NumberFormatter
+        let formatter: NumberFormatter = NumberFormatter()
         
+        //formatter style
+        formatter.numberStyle = .decimal
+        
+        //formatter
+        let num: NSNumber = NSNumber(value: labelInt)
+        
+        // set the label text
+        label.text = formatter.string(from: num)
     }
     
     // changes operator modes upon operator button taps
@@ -148,8 +147,5 @@ class ViewController: UIViewController {
         // update that the last button tapped was an operator button
         lastButtonWasOperator = true
     }
-    
-
-
 }
 
