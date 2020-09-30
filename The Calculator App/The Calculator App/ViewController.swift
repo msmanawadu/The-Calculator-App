@@ -7,6 +7,7 @@
 
 import UIKit
 
+// enum values for calculator modes
 enum modes {
     case notSet
     case addition
@@ -18,29 +19,30 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var label: UILabel!
     
-    var labelString: String = "0"
-    var currentMode: modes = .notSet
+    var labelString: String = "0" // string version of final answer
+    
+    var currentMode: modes = .notSet // when calculator loads up, it is in notSet mode
+    
     var savedNum: Int = 0 // holds first numeric value entered before any operator button tap
-    var lastButtonWasOperator: Bool = false
+    
+    var lastButtonWasOperator: Bool = false // when calculator loads up, no operator button is pressed
     
     @IBAction func didPressPlus(_ sender: Any) {
         changeModes(newMode: .addition)
     }
     
-    
     @IBAction func didPressMinus(_ sender: Any) {
         changeModes(newMode: .substraction)
     }
-    
     
     @IBAction func didPressMultiply(_ sender: Any) {
         changeModes(newMode: .multiplication)
     }
     
-    // method where all calculation happens
+    // method where all calculations happens
     @IBAction func didPressEquals(_ sender: Any) {
-        // make sure that we can convert the labelString to Int
         
+        // make sure that we can convert the labelString to Int
         guard let labelInt: Int = Int(labelString) else {
             label.text = "Error"
             return
@@ -68,12 +70,12 @@ class ViewController: UIViewController {
         labelString = "\(savedNum)"
         updateText()
         
-        /* since the last button tapped was equals (=) button, which is an operator button */
+        /* since the last button tapped was equals (=) button, which is an operator button. This make sure user presses numeric buttons next*/
         lastButtonWasOperator = true
-        // make sure user presses numeric buttons next
     }
     
     @IBAction func didPressClear(_ sender: Any) {
+        
         // resests calculator's properties, all to defaults
         labelString = "0"
         currentMode = .notSet
@@ -86,13 +88,15 @@ class ViewController: UIViewController {
     
     
     @IBAction func didPressNumber(_ sender: UIButton) {
-        // accept the numeric input and make sure that there is textual input
         
+        /* accept the first numeric input sent through the buttons and make sure that there is textual input */
         guard let stringValue: String = sender.titleLabel?.text else {
             label.text = "Error"
             return
+            // stringValue - string format of button text
         }
         
+        /* second numeric input sent through the buttons, after an operator button tap */
         if (lastButtonWasOperator) {
             // if true, the last button tapped, is no longer an operator button
             lastButtonWasOperator = false
@@ -104,26 +108,26 @@ class ViewController: UIViewController {
         // append and set the labelString
         labelString = labelString.appending(stringValue)
         
-        // handle possible preceeding 0's issue by, to Integer type casting
+        /* handle possible preceeding 0's issue by, String to Integer type casting */
         updateText()
     }
     
     
     func updateText() {
-        // make sure that we can convert the labelString to Int
         
+        // make sure that we can convert the labelString to Int
         guard let labelInt: Int = Int(labelString) else {
             label.text = "Error"
             return
         }
         
-        // capturing every numeric input until user presses an operator button
+        /* capturing every numeric input, before user presses an operator button */
         if (currentMode == .notSet) {
             savedNum = labelInt
         }
         
         // format numbers with commas
-        // create constant formatter, an object of NumberFormatter
+        // create the constant formatter, an object of NumberFormatter
         let formatter: NumberFormatter = NumberFormatter()
         
         //formatter style
@@ -132,18 +136,19 @@ class ViewController: UIViewController {
         //formatter
         let num: NSNumber = NSNumber(value: labelInt)
         
-        // set the label text
+        // set the formatted label text with commas
         label.text = formatter.string(from: num)
     }
     
     // changes operator modes upon operator button taps
     func changeModes(newMode: modes){
-        // ignore operator button taps before any number inputs
+        
+        // ignore any operator button taps before any numeric inputs
         if(savedNum == 0){
             return
         }
         
-        // if there is a number input, before an operator button tap
+        // if there is numeric inputs, before an operator button tap
         currentMode = newMode
         
         // update that the last button tapped was an operator button
