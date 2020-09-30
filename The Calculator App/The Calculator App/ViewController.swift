@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func didPressMultiply(_ sender: Any) {
-        
+        changeModes(newMode: .multiplication)
     }
     
     // method where all calculation happens
@@ -57,6 +57,8 @@ class ViewController: UIViewController {
             savedNum += labelInt
         } else if(currentMode == .substraction) {
             savedNum -= labelInt
+        } else {
+            savedNum *= labelInt
         }
         
         // reset current operator mode to notSet
